@@ -1,0 +1,5 @@
+*.pyc
+__pycache__/
+BlogPersonal/LocalSetting.py
+db.sqlite3
+BlogPersonal/staticRoot

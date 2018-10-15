@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %} Blog Ver Articulo {% endblock %}
+{% block content %}
+<div class="containe">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="col-sm-2">
+                Soy Juan, apasionado por la tecnologia y en continuo aprendizaje.
+                <br><br>
+                {% include "loginOption.html" %}
+            </div>
+            <div class="col-sm-8">
+                {% if object %}
+                  <article class="secciones">
+                    <div>
+                        <div class="titulosNotas">
+                            {{ object.titulo|capfirst }}
+                        </div>
+                        <div class="datosAutor">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                            {{ object.autor|capfirst }},
+                            {{ object.create|date:"Y-m-d H:i" }},
+                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                            {{ object.vistas }} veces.
+                        </div>
+                        <br>
+                        <div>
+                            {{ object.formatted_markdown|safe }}
+                        </div>
+                        <br>
+                        <h3>Comentarios:</h3>
+                        <div>
+                            {% for bb in object.get_comments.all %}
+                              <div class="datosAutor">
+                                  <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                  {{ bb.autor }}, {{ bb.create|date:"Y-m-d H:i" }}
+                              </div>
+                              <div class="CajaComentario ">
+                                  {{ bb.comment|linebreaks }}
+                              </div>
+                            {% endfor %}
+                        </div>
+                 {% else %}
+                    <h3> No existe la Entrada </h3>
+                 {% endif %}
+                {% if request.user.is_authenticated %}
+                <div>
+                    <form method="post">
+                        <p><h5>Deja tu comentario</h5></p>
+                        {% csrf_token %}
+                        <div>
+                            {{ form.comment }}
+                        </div>
+                        <button class="btn btn-primary" type="submit">Enviar</button>
+                    </form>
+               {% else %}
+                  <a href="{% url "accounts:registrar" %}">Registrate para comentar...</a>
+                  <br><br>
+               {% endif%}
+                <br>
+               {% if request.user.is_staff %}
+                  <a class="btn btn-primary" href={% url 'articulos:borrar_articles' object.id  %}>Borrar</a>
+                  <a class="btn btn-primary" href={% url 'articulos:edit_articles' object.id  %}>Editar</a>
+              {% endif %}
+                <a class="btn btn-primary" href={% url 'articulos:list_articles' %}>Volver</a>
+                 </div>
+                </div>
+            </article>
+        </div>
+        <div class="col-sm-2">
+        </div>
+      </div>
+    </div>
+</div>
+<br>
+{% endblock content %}

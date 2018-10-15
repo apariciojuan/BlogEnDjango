@@ -1,0 +1,17 @@
+<!--- <ul class="navbar-nav alinearDerecha"> --->
+
+      {% if request.user.is_authenticated%}
+          <p>
+              <h4 class="m-2 text-center text-dark">Hola, {{request.user.username}}.</h4>
+          </p>
+          <p>
+              <a class="btn btn-primary" href="{% url "accounts:logout" %}">Logout</a>
+        {% if request.user.is_staff %}
+              <a class="btn btn-primary" href="{% url "articulos:crear_articles" %}">New Post</a>
+          </p>
+        {% endif %}
+      {% else %}
+          <p>
+              <a class="btn btn-primary" href="{% url "accounts:login" %}">Login</a>
+          </p>
+      {% endif %}

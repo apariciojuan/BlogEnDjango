@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}
+Blog Tecnologico
+{% endblock %}
+
+{% block content %}
+<div class="containe">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="col-sm-2">
+                Soy Juan, apasionado por la tecnologia y en continuo aprendizaje.
+                <br><br>
+                {% include "loginOption.html" %}
+            </div>
+        <div class="col-sm-8">
+         {% if object_list %}
+            {% for articles in object_list %}
+              <article class="secciones">
+                  <div>
+                      <a href="{% url  'articulos:ver_articles' articles.slug %}">
+                          <div class="titulosNotas">
+                              {{ articles.titulo|capfirst }}
+                          </div>
+                      </a>
+                  <div class="datosAutor">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        {{ articles.autor|capfirst }},
+                        {{ articles.create|date:"Y-m-d H:i" }}
+                  </div>
+                  <br>
+                  <div>
+                      {{ articles.formatted_markdown|safe|truncatechars:450 }}
+                  </div>
+                  <a href="{% url  'articulos:ver_articles' articles.slug %}"><h4>Ver mas...</h4></a>
+                  </div>
+              </article>
+            {% endfor %}
+         {% endif %}
+         {% include "paginator.html" with page=page_obj objectFilter=objectFilter %}
+        </div>
+        <div class="col-sm-2">
+            {% include "search.html" %}
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
